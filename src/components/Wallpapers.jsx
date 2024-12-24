@@ -102,7 +102,7 @@ const Wallpapers = () => {
             onChange={handleOnChange}
             value={tags}
             type="text"
-            className="w-64 p-2 rounded-md bg-blue-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-teal-500 outline-none"
+            className="w-64 p-2 rounded-md bg-blue-gray-700 text-black placeholder-gray-400 focus:ring-2 focus:ring-teal-500 outline-none"
           />
           <button
             onClick={handleSearch}
