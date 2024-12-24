@@ -3,15 +3,13 @@ import axios from 'axios';
 import mount from '../components/mount.png';
 
 const Wallpapers = () => {
-  // const apiKEY = 'gNJhOjpSIMjLCRlprgDP02RyHdii4zrQ1ocQu_nzQmE';
-
   const [tags, setTags] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('nature'); // Separate state for category
+  const [selectedCategory, setSelectedCategory] = useState('nature');
   const [wallData, setWallData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [modalImage, setModalImage] = useState(null);
-// console.log(import.meta.env.VITE_API_KEY)
+
   const getData = async (query = tags || selectedCategory, page = 1) => {
     const response = await axios.get('https://api.unsplash.com/search/photos', {
       params: {
@@ -45,20 +43,20 @@ const Wallpapers = () => {
   };
 
   const handleOnChange = (e) => {
-    setTags(e.target.value); // Only update tags when typing
+    setTags(e.target.value);
   };
 
   const handleSearch = () => {
     if (tags.trim()) {
-      setSelectedCategory(''); // Clear selected category when searching manually
+      setSelectedCategory('');
       setCurrentPage(1);
       getData(tags, 1);
     }
   };
 
   const handleCategoryClick = (category) => {
-    setTags(''); // Clear search input
-    setSelectedCategory(category); // Update category state
+    setTags('');
+    setSelectedCategory(category);
     setCurrentPage(1);
     getData(category, 1);
   };
@@ -74,24 +72,24 @@ const Wallpapers = () => {
   return (
     <>
       {/* Header Section */}
-      <div className="bg-violet-500 bg-opacity-5 w-[100%] shadow shadow-violet-500 h-[60px] flex justify-between items-center px-4">
+      <div className="bg-blue-gray-900 w-full h-16 flex justify-between items-center px-6 shadow-md">
         {/* Navigation Links */}
-        <div className="flex gap-4">
+        <div className="flex gap-6">
           <button
             onClick={() => handleCategoryClick('Manga')}
-            className="text-white hover:text-violet-400"
+            className="text-teal-300 hover:text-teal-500 text-lg font-medium transition-colors"
           >
             Manga
           </button>
           <button
             onClick={() => handleCategoryClick('Nature')}
-            className="text-white hover:text-violet-400"
+            className="text-teal-300 hover:text-teal-500 text-lg font-medium transition-colors"
           >
             Nature
           </button>
           <button
             onClick={() => handleCategoryClick('Cars')}
-            className="text-white hover:text-violet-400"
+            className="text-teal-300 hover:text-teal-500 text-lg font-medium transition-colors"
           >
             Cars
           </button>
@@ -102,41 +100,44 @@ const Wallpapers = () => {
           <input
             placeholder="Search for Images"
             onChange={handleOnChange}
-            value={tags} // Bind only to the input field
+            value={tags}
             type="text"
-            className="w-[300px] p-2 rounded placeholder:pl-2"
+            className="w-64 p-2 rounded-md bg-blue-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-teal-500 outline-none"
           />
-          <button onClick={handleSearch} className="bg-cyan-400 p-2 ml-2 rounded">
+          <button
+            onClick={handleSearch}
+            className="ml-3 bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition"
+          >
             Search
           </button>
         </div>
 
         {/* Logo */}
         <div>
-          <img className="w-[50px] h-[50px] object-cover shadow" src={mount} alt="Logo" />
+          <img className="w-12 h-12 object-cover rounded-full shadow-lg" src={mount} alt="Logo" />
         </div>
       </div>
 
       {/* Image Gallery */}
-      <div className="flex flex-col items-center mt-4">
-        <div className="grid grid-cols-5 gap-4">
+      <div className="flex flex-col items-center mt-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 px-4">
           {wallData.map((elem, indx) => (
             <div key={indx} className="relative group">
               <img
                 src={elem.urls.small}
                 alt=""
-                className="w-full h-[150px] object-cover rounded shadow cursor-pointer group-hover:scale-110 transition-transform"
-                onClick={() => handleImageClick(elem.urls.full)} // Open modal with full-resolution image
+                className="w-full h-40 object-cover rounded-md shadow-md group-hover:scale-105 transition-transform cursor-pointer"
+                onClick={() => handleImageClick(elem.urls.full)}
               />
             </div>
           ))}
         </div>
 
         {/* Pagination */}
-        <div className="flex gap-4 mt-6">
+        <div className="flex gap-6 mt-8">
           <button
             disabled={currentPage === 1}
-            className={`text-white bg-cyan-300 p-2 rounded-sm ${
+            className={`text-white bg-blue-gray-700 px-4 py-2 rounded-md font-medium hover:bg-blue-gray-600 transition ${
               currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             onClick={handlePreviousPage}
@@ -145,7 +146,7 @@ const Wallpapers = () => {
           </button>
           <button
             disabled={currentPage === totalPages}
-            className={`text-white bg-cyan-500 p-2 rounded-sm ${
+            className={`text-white bg-teal-500 px-4 py-2 rounded-md font-medium hover:bg-teal-600 transition ${
               currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             onClick={handleNextPage}
@@ -154,7 +155,7 @@ const Wallpapers = () => {
           </button>
         </div>
 
-        <p className="text-white mt-2">
+        <p className="text-white mt-4">
           Page {currentPage} of {totalPages}
         </p>
       </div>
@@ -166,12 +167,12 @@ const Wallpapers = () => {
           onClick={closeModal}
         >
           <div className="relative">
-            <img src={modalImage} alt="Full Size" className="max-w-[90vw] max-h-[90vh]" />
+            <img src={modalImage} alt="Full Size" className="max-w-[90vw] max-h-[90vh] rounded-md" />
             <button
               onClick={closeModal}
-              className="absolute top-2 right-2 text-white bg-red-500 bg-opacity-55 rounded p-2 px-4"
+              className="absolute top-2 right-2 text-white bg-teal-500 bg-opacity-75 rounded-md px-4 py-2"
             >
-              X
+              Close
             </button>
           </div>
         </div>
